@@ -204,3 +204,5 @@ void screenSetTextColor(int color);
 void screenResetTextColor();
 
 #endif /* _SCREEN_H_ */
+
+void screenSetCharAt(int x, int y, char c);

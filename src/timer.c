@@ -53,3 +53,9 @@ void timerPrint()
 {
     printf("Timer:  %d", getTimeDiff());
 }
+
+#include <unistd.h>
+
+void timerSleep(int milliseconds) {
+    usleep(milliseconds * 1000); // Convert milliseconds to microseconds
+}

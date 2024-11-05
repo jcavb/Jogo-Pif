@@ -99,8 +99,8 @@ int main() {
         desenhar();
         timerSleep(100); // Controle da velocidade
 
-        if (keyboardHit()) { // Verifica se uma tecla foi pressionada
-            int tecla = keyboardRead();
+        if (keyhit()) { // Verifica se uma tecla foi pressionada
+            int tecla = readch();
             controlarDirecao(tecla);
         }
 

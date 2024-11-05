@@ -16,3 +16,5 @@ int timerTimeOver();
 void timerPrint();
 
 void timerReset();
+
+void timerSleep(int milliseconds);

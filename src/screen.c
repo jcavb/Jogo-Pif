@@ -108,3 +108,9 @@ void screenSetColor(screenColor fg, screenColor bg)
 
     printf("%s%s%d;%dm", ESC, atr, fg + 30, bg + 40);
 }
+
+void screenSetCharAt(int x, int y, char c) {
+    screenGotoxy(x, y); // Move cursor to (x, y)
+    printf("%c", c);    // Print character 'c' at the specified position
+    screenUpdate();     // Refresh the screen
+}
