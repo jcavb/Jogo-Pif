@@ -53,13 +53,15 @@ void screenDrawBorders()
     screenBoxDisable();
 }
 
-void screenInit(int drawBorders)
-{
-    screenClear();
-    if (drawBorders)
-        screenDrawBorders();
-    screenHomeCursor();
-    screenHideCursor();
+#include "screen.h"
+#include <stdio.h>
+
+void screenInit(int drawBorders) {
+    screenClear();       // Limpa a tela
+    screenHideCursor();   // Esconde o cursor
+    if (drawBorders) {
+        screenDrawBorders(); // Desenha as bordas se drawBorders for diferente de zero
+    }
 }
 
 void screenDestroy()
