@@ -1,112 +1,86 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <conio.h>
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-#define LARGURA 40 // Largura do campo
-#define ALTURA 20 // Altura do campo
-#define SNAKE_MAX_LENGTH 100
+#define WIDTH 20
+#define HEIGHT 20
 
-// Estrutura para representar posições
 typedef struct {
     int x, y;
-} Posicao;
+} Car;
 
-// Variáveis globais
-Posicao cobra[SNAKE_MAX_LENGTH];
-int comprimento = 3; // Tamanho inicial da cobra
-int direcaoX = 1, direcaoY = 0; // Direção inicial para a direita
-Posicao comida;
+Car player;
+Car obstacles[5];
+int score = 0;
+int game_over = 0;
 
-// Função para inicializar o jogo
-void inicializarJogo() {
-    screenInit(1);
-    keyboardInit();
-    timerInit(100);
-
-    srand(time(NULL));
-    // Inicializa a cobra no centro do campo
-    for (int i = 0; i < comprimento; i++) {
-        cobra[i].x = LARGURA / 2 - i;
-        cobra[i].y = ALTURA / 2;
-    }
-    // Gera a primeira comida
-    comida.x = rand() % LARGURA;
-    comida.y = rand() % ALTURA;
-}
-
-// Função para encerrar o jogo
-void encerrarJogo() {
-    screenClear();
-    printf("Fim de Jogo! Pontuação: %d\n", comprimento - 3);
-}
-
-// Função para desenhar a cobra e a comida
-void desenhar() {
-    screenClear();
-    screenSetCharAt(comida.x, comida.y, 'O'); // Desenha a comida
-    for (int i = 0; i < comprimento; i++) {
-        screenSetCharAt(cobra[i].x, cobra[i].y, '#'); // Desenha cada parte da cobra
+void init_game() {
+    player.x = WIDTH / 2;
+    player.y = HEIGHT - 2;
+    for (int i = 0; i < 5; i++) {
+        obstacles[i].x = rand() % WIDTH;
+        obstacles[i].y = rand() % (HEIGHT / 2);
     }
 }
 
-// Função para atualizar a posição da cobra
-void atualizarPosicao() {
-    // Move o corpo da cobra
-    for (int i = comprimento - 1; i > 0; i--) {
-        cobra[i] = cobra[i - 1];
-    }
-    // Atualiza a posição da cabeça
-    cobra[0].x += direcaoX;
-    cobra[0].y += direcaoY;
-
-    // Verifica se a cobra comeu a comida
-    if (cobra[0].x == comida.x && cobra[0].y == comida.y) {
-        comprimento++;
-        comida.x = rand() % LARGURA;
-        comida.y = rand() % ALTURA;
+void update_game() {
+    if (kbhit()) {
+        char key = getch();
+        if (key == 'w') player.y--;
+        if (key == 's') player.y++;
+        if (key == 'a') player.x--;
+        if (key == 'd') player.x++;
     }
 
-    // Verifica colisão com as bordas
-    if (cobra[0].x < 0 || cobra[0].x >= LARGURA || cobra[0].y < 0 || cobra[0].y >= ALTURA) {
-        encerrarJogo();
-        exit(0);
-    }
-
-    // Verifica colisão com o próprio corpo
-    for (int i = 1; i < comprimento; i++) {
-        if (cobra[0].x == cobra[i].x && cobra[0].y == cobra[i].y) {
-            encerrarJogo();
-            exit(0);
+    for (int i = 0; i < 5; i++) {
+        obstacles[i].y++;
+        if (obstacles[i].y >= HEIGHT) {
+            obstacles[i].y = 0;
+            obstacles[i].x = rand() % WIDTH;
+            score++;
+        }
+        if (obstacles[i].x == player.x && obstacles[i].y == player.y) {
+            game_over = 1;
         }
     }
 }
 
-// Função para controlar a direção da cobra
-void controlarDirecao(int tecla) {
-    if (tecla == 'w' && direcaoY == 0) { direcaoX = 0; direcaoY = -1; }
-    if (tecla == 's' && direcaoY == 0) { direcaoX = 0; direcaoY = 1; }
-    if (tecla == 'a' && direcaoX == 0) { direcaoX = -1; direcaoY = 0; }
-    if (tecla == 'd' && direcaoX == 0) { direcaoX = 1; direcaoY = 0; }
+void draw_game() {
+    clear_screen();
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            if (i == player.y && j == player.x) {
+                printf("A");
+            } else {
+                int is_obstacle = 0;
+                for (int k = 0; k < 5; k++) {
+                    if (i == obstacles[k].y && j == obstacles[k].x) {
+                        printf("X");
+                        is_obstacle = 1;
+                        break;
+                    }
+                }
+                if (!is_obstacle) {
+                    printf(".");
+                }
+            }
+        }
+        printf("\n");
+    }
+    printf("Score: %d\n", score);
 }
 
 int main() {
-    inicializarJogo();
-
-    while (1) {
-        desenhar();
-        timerSleep(100); // Controle da velocidade
-
-        if (keyhit()) { // Verifica se uma tecla foi pressionada
-            int tecla = readch();
-            controlarDirecao(tecla);
-        }
-
-        atualizarPosicao();
+    init_screen();
+    init_game();
+    while (!game_over) {
+        update_game();
+        draw_game();
+        delay(100);
     }
-
-    encerrarJogo();
-    return 0;
+    printf("Game Over! Final Score: %d\n", score);
+return 0;
 }
