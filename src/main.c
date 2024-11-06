@@ -99,13 +99,11 @@ int main() {
 
     while (jogoAtivo) {
         desenhar();
-        timerSleep(INTERVALO_TEMPO); // Controle de tempo do jogo
-
-        if (keyhit()) { // Verifica se uma tecla foi pressionada
-            int tecla = readch();
-            controlarCarro(tecla);
-        }
-
+        
+        // Aguarda a entrada do jogador antes de cada atualização
+        int tecla = readch();
+        controlarCarro(tecla);
+        
         atualizarObstaculos(); // Atualiza a posição dos obstáculos
     }
 

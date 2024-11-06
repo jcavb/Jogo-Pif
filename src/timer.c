@@ -1,5 +1,4 @@
 #include "timer.h"
-#include <unistd.h>
 
 void timerInit(int valueMilliSec) {
     // Configuração inicial, se necessário
