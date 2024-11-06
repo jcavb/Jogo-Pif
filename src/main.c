@@ -91,14 +91,21 @@ void atualizarObstaculos() {
     }
 }
 
-
 // Função para controlar o carro
 void controlarCarro(int tecla) {
     switch (tecla) {
-        case 'w': if (carro.y > 0) carro.y--; break;             // Move para cima
-        case 's': if (carro.y < ALTURA - 1) carro.y++; break;    // Move para baixo
-        case 'a': if (carro.x > 0) carro.x--; break;             // Move para a faixa da esquerda
-        case 'd': if (carro.x < LARGURA - 1) carro.x++; break;   // Move para a faixa da direita
+        case 'w': 
+            if (carro.y > 1) carro.y--; // Move para cima, mas permanece dentro da pista
+            break;
+        case 's': 
+            if (carro.y < ALTURA - 2) carro.y++; // Move para baixo, mas permanece dentro da pista
+            break;
+        case 'a': 
+            if (carro.x > 0) carro.x--; // Move para a faixa da esquerda, sem sair dos limites
+            break;
+        case 'd': 
+            if (carro.x < LARGURA - 1) carro.x++; // Move para a faixa da direita, sem sair dos limites
+            break;
     }
 }
 
