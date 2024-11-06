@@ -1,13 +1,19 @@
 #include "timer.h"
 
 void timerInit(int valueMilliSec) {
-    // Configuração inicial, se necessário
+    // Inicialização simples, sem nada específico
 }
 
 void timerDestroy() {
-    // Finalização, se necessário
+    // Finalização simples, sem nada específico
 }
 
 void timerSleep(int milliseconds) {
-    usleep(milliseconds * 1000); // Converte milissegundos para microssegundos
+    // Loop de espera para simular uma pausa
+    volatile long long int i, j;
+    for (i = 0; i < milliseconds * 1000; i++) {
+        for (j = 0; j < 100; j++) {
+            // Laço vazio
+        }
+    }
 }
