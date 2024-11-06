@@ -1,3 +1,16 @@
+# Projeto de Programação Imperativa e Funcional
+
+# Integrantes do Projeto
+- João Rafael Andrade Filgueira - [@JoaoRafael04](https://github.com/JoaoRafael04)
+- Júlio César Aragão Vilas Bôas - [@jcavb](https://github.com/jcavb)
+- Jarbas Esteves De Assis Neto - [@jaas5](https://github.com/jaas5)
+- Arthur Lúcio De Almeida Assis Silca - [@ArthurLucio](https://github.com/ArthurLucio)
+
+# Sobre a Disciplina
+- Programação Imperativa e Funcional - 2024.2
+- Instituição de Ensino: CESAR School
+- Professor Orientador do Projeto: Diego De Freitas Bezerra
+
 # SnakeCash 🐍💰
 
 ## Sobre o Projeto
