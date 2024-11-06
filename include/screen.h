@@ -1,7 +1,12 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-void init_screen();
-void clear_screen();
+void screenInit(int drawBorders);
+void screenClear();
+void screenSetCharAt(int x, int y, char c);
+void screenGotoxy(int x, int y);
+void screenUpdate();
+void screenHideCursor();
+void screenShowCursor();
 
-#endif
+#endif /* SCREEN_H */

@@ -1,7 +1,9 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-int kbhit();
-char getch();
+void keyboardInit();
+void keyboardDestroy();
+int keyhit();
+int readch();
 
-#endif
+#endif /* KEYBOARD_H */

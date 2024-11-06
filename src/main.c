@@ -1,86 +1,118 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
+#include <time.h>
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-#define WIDTH 20
-#define HEIGHT 20
+#define LARGURA 3         // Número de faixas (esquerda, meio, direita)
+#define ALTURA 20         // Altura da pista
+#define CARRO_CHAR 'A'    // Carro do jogador
+#define OBSTACULO_CHAR '#'// Obstáculo
+#define INTERVALO_TEMPO 100 // Intervalo de tempo para atualizar o jogo em ms
 
 typedef struct {
     int x, y;
-} Car;
+} Posicao;
 
-Car player;
-Car obstacles[5];
-int score = 0;
-int game_over = 0;
+// Variáveis globais
+Posicao carro;
+Posicao obstaculos[ALTURA]; // Obstáculos ao longo da pista
+int pontuacao = 0;          // Pontuação do jogador
+int jogoAtivo = 1;          // Estado do jogo (1 = ativo, 0 = game over)
 
-void init_game() {
-    player.x = WIDTH / 2;
-    player.y = HEIGHT - 2;
-    for (int i = 0; i < 5; i++) {
-        obstacles[i].x = rand() % WIDTH;
-        obstacles[i].y = rand() % (HEIGHT / 2);
+// Função para inicializar o jogo
+void inicializarJogo() {
+    screenInit(1);          // Inicia a tela com bordas
+    keyboardInit();         // Inicia o teclado
+    timerInit(INTERVALO_TEMPO); // Inicia o timer com intervalo de 100ms
+    srand(time(NULL));      // Semente para geração aleatória
+
+    // Configura a posição inicial do carro na faixa do meio
+    carro.x = LARGURA / 2;
+    carro.y = ALTURA - 2;
+
+    // Inicializa os obstáculos fora da tela
+    for (int i = 0; i < ALTURA; i++) {
+        obstaculos[i].x = rand() % LARGURA; // Gera obstáculos em faixas aleatórias
+        obstaculos[i].y = -1;               // Obstáculo começa fora da tela
     }
 }
 
-void update_game() {
-    if (kbhit()) {
-        char key = getch();
-        if (key == 'w') player.y--;
-        if (key == 's') player.y++;
-        if (key == 'a') player.x--;
-        if (key == 'd') player.x++;
+// Função para desenhar o carro e os obstáculos
+void desenhar() {
+    screenClear();
+
+    // Desenha o carro
+    screenSetCharAt(carro.x, carro.y, CARRO_CHAR);
+
+    // Desenha os obstáculos
+    for (int i = 0; i < ALTURA; i++) {
+        if (obstaculos[i].y >= 0) { // Desenha somente se o obstáculo está na pista
+            screenSetCharAt(obstaculos[i].x, obstaculos[i].y, OBSTACULO_CHAR);
+        }
     }
 
-    for (int i = 0; i < 5; i++) {
-        obstacles[i].y++;
-        if (obstacles[i].y >= HEIGHT) {
-            obstacles[i].y = 0;
-            obstacles[i].x = rand() % WIDTH;
-            score++;
-        }
-        if (obstacles[i].x == player.x && obstacles[i].y == player.y) {
-            game_over = 1;
-        }
-    }
+    // Exibe a pontuação
+    screenGotoxy(0, ALTURA + 1);
+    printf("Pontuação: %d\n", pontuacao);
+    screenUpdate();
 }
 
-void draw_game() {
-    clear_screen();
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) {
-            if (i == player.y && j == player.x) {
-                printf("A");
-            } else {
-                int is_obstacle = 0;
-                for (int k = 0; k < 5; k++) {
-                    if (i == obstacles[k].y && j == obstacles[k].x) {
-                        printf("X");
-                        is_obstacle = 1;
-                        break;
-                    }
-                }
-                if (!is_obstacle) {
-                    printf(".");
-                }
+// Função para atualizar a posição dos obstáculos
+void atualizarObstaculos() {
+    for (int i = 0; i < ALTURA; i++) {
+        if (obstaculos[i].y >= 0) {
+            obstaculos[i].y++; // Move o obstáculo para baixo
+
+            // Verifica colisão com o carro
+            if (obstaculos[i].x == carro.x && obstaculos[i].y == carro.y) {
+                jogoAtivo = 0; // Game over
             }
+        } else {
+            // Gera um novo obstáculo aleatório no topo
+            obstaculos[i].x = rand() % LARGURA;
+            obstaculos[i].y = 0;
         }
-        printf("\n");
+
+        // Remove o obstáculo se sair da tela
+        if (obstaculos[i].y >= ALTURA) {
+            obstaculos[i].y = -1; // Sai da tela
+            pontuacao++;          // Aumenta a pontuação ao desviar
+        }
     }
-    printf("Score: %d\n", score);
 }
 
-int main() {
-    init_screen();
-    init_game();
-    while (!game_over) {
-        update_game();
-        draw_game();
-        delay(100);
+// Função para controlar o carro
+void controlarCarro(int tecla) {
+    switch (tecla) {
+        case 'w': if (carro.y > 0) carro.y--; break;             // Move para cima
+        case 's': if (carro.y < ALTURA - 1) carro.y++; break;    // Move para baixo
+        case 'a': if (carro.x > 0) carro.x--; break;             // Move para a faixa da esquerda
+        case 'd': if (carro.x < LARGURA - 1) carro.x++; break;   // Move para a faixa da direita
     }
-    printf("Game Over! Final Score: %d\n", score);
-return 0;
+}
+
+// Função principal do jogo
+int main() {
+    inicializarJogo();
+
+    while (jogoAtivo) {
+        desenhar();
+        timerSleep(INTERVALO_TEMPO); // Controle de tempo do jogo
+
+        if (keyhit()) { // Verifica se uma tecla foi pressionada
+            int tecla = readch();
+            controlarCarro(tecla);
+        }
+
+        atualizarObstaculos(); // Atualiza a posição dos obstáculos
+    }
+
+    // Exibe mensagem de fim de jogo
+    screenClear();
+    screenGotoxy(0, ALTURA / 2);
+    printf("Game Over! Pontuação final: %d\n", pontuacao);
+
+    return 0;
 }

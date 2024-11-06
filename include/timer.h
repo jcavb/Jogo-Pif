@@ -1,6 +1,8 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-void delay(int milliseconds);
+void timerInit(int valueMilliSec);
+void timerSleep(int milliseconds);
+void timerDestroy();
 
-#endif
+#endif /* TIMER_H */
