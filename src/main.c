@@ -61,6 +61,8 @@ void desenhar() {
 
 // Função para atualizar a posição dos obstáculos
 void atualizarObstaculos() {
+    int faixa_ocupada[3] = {0, 0, 0}; // Controle de quais faixas têm obstáculos
+
     for (int i = 0; i < ALTURA; i++) {
         if (obstaculos[i].y >= 0) {
             obstaculos[i].y++; // Move o obstáculo para baixo
@@ -70,9 +72,15 @@ void atualizarObstaculos() {
                 jogoAtivo = 0; // Game over
             }
         } else {
-            // Gera um novo obstáculo aleatório no topo
-            obstaculos[i].x = rand() % LARGURA;
+            // Gera um novo obstáculo aleatório no topo, garantindo no máximo 2 faixas ocupadas
+            int nova_faixa;
+            do {
+                nova_faixa = rand() % LARGURA;
+            } while (faixa_ocupada[0] + faixa_ocupada[1] + faixa_ocupada[2] >= 2 && faixa_ocupada[nova_faixa] == 1);
+
+            obstaculos[i].x = nova_faixa;
             obstaculos[i].y = 0;
+            faixa_ocupada[nova_faixa] = 1;
         }
 
         // Remove o obstáculo se sair da tela
@@ -82,6 +90,7 @@ void atualizarObstaculos() {
         }
     }
 }
+
 
 // Função para controlar o carro
 void controlarCarro(int tecla) {
