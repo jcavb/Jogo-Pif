@@ -36,7 +36,8 @@ SnakeCash é um jogo de cobrinha desenvolvido para o projeto de PIF do 2º perí
 3. *Navegue até o repositório com o comando* "CD" e digite: gcc *.c -o snake
 4. *Após a compilação bem-sucedida, você pode executar o programa com o seguinte comando*: **./snake** 
 
-
+## Pontuação
+No Snake Cash, a pontuação é uma métrica que reflete o desempenho do jogador enquanto controla a cobra para coletar as moedas. A cada moeda coletada, a cobra aumenta de tamanho e o jogador ganha dinheiro no jogo.
 
 
 
