@@ -77,8 +77,8 @@ void atualizarPosicao() {
     if (cobra[0].x == comida.x && cobra[0].y == comida.y) {
         comprimento++;
         // Nova comida nascendo dentro das bordas
-        comida.x = 1 + rand() % (LARGURA - 2);
-        comida.y = 1 + rand() % (ALTURA - 2);
+        comida.x = 1 + rand() % (LARGURA - 5);
+        comida.y = 1 + rand() % (ALTURA - 5);
     }
 }
 
