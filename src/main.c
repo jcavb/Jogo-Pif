@@ -42,6 +42,7 @@ void encerrarJogo() {
 
 void desenhar() {
     screenClear();
+    screenInit(1);
     screenSetCharAt(comida.x, comida.y, 'O');
     for (int i = 0; i < comprimento; i++) {
         screenSetCharAt(cobra[i].x, cobra[i].y, '#');
