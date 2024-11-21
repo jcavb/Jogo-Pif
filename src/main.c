@@ -46,6 +46,7 @@ void encerrarJogo() {
 // Função para desenhar a cobra e a comida
 void desenhar() {
     screenClear();
+    screenInit(1);
     screenSetCharAt(comida.x, comida.y, 'O'); // Desenha a comida
     for (int i = 0; i < comprimento; i++) {
         screenSetCharAt(cobra[i].x, cobra[i].y, '#'); // Desenha cada parte da cobra
