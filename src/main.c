@@ -30,9 +30,9 @@ void inicializarJogo() {
         cobra[i].y = ALTURA / 2;
     }
 
-    // Inicializa a comida dentro das bordas
-    comida.x = 1 + rand() % (LARGURA - 2);
-    comida.y = 1 + rand() % (ALTURA - 2);
+    // Inicializa a comida dentro do campo, mas fora das bordas
+    comida.x = 1 + rand() % (LARGURA - 2); // Garante que está entre 1 e LARGURA - 2
+    comida.y = 1 + rand() % (ALTURA - 2);  // Garante que está entre 1 e ALTURA - 2
 }
 
 void encerrarJogo() {
@@ -42,7 +42,6 @@ void encerrarJogo() {
 
 void desenhar() {
     screenClear();
-    screenInit(1);
     screenSetCharAt(comida.x, comida.y, 'O');
     for (int i = 0; i < comprimento; i++) {
         screenSetCharAt(cobra[i].x, cobra[i].y, '#');
@@ -59,8 +58,8 @@ void atualizarPosicao() {
     cobra[0].x += direcaoX;
     cobra[0].y += direcaoY;
 
-    // Colisão com as bordas ajustada para incluir bordas externas
-    if (cobra[0].x <= 0 || cobra[0].x >= LARGURA - 1 || cobra[0].y <= 0 || cobra[0].y >= ALTURA - 1) {
+    // Colisão com as bordas
+    if (cobra[0].x < 0 || cobra[0].x >= LARGURA || cobra[0].y < 0 || cobra[0].y >= ALTURA) {
         encerrarJogo();
         exit(0);
     }
@@ -76,9 +75,9 @@ void atualizarPosicao() {
     // Verifica se comeu a comida
     if (cobra[0].x == comida.x && cobra[0].y == comida.y) {
         comprimento++;
-        // Nova comida nascendo dentro das bordas
-        comida.x = 1 + rand() % (LARGURA - 2);
-        comida.y = 1 + rand() % (ALTURA - 2);
+        // Gera uma nova posição para a comida dentro das bordas
+        comida.x = 1 + rand() % (LARGURA - 2); // Entre 1 e LARGURA - 2
+        comida.y = 1 + rand() % (ALTURA - 2);  // Entre 1 e ALTURA - 2
     }
 }
 
