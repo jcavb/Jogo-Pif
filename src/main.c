@@ -5,8 +5,8 @@
 #include "keyboard.h"
 #include "timer.h"
 
-#define LARGURA 40
-#define ALTURA 40
+#define LARGURA 80
+#define ALTURA 30
 #define SNAKE_MAX_LENGTH 100
 
 typedef struct {
