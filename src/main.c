@@ -5,7 +5,7 @@
 #include "keyboard.h"
 #include "timer.h"
 
-#define LARGURA 80
+#define LARGURA 79
 #define ALTURA 30
 #define SNAKE_MAX_LENGTH 100
 
