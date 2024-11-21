@@ -6,7 +6,7 @@
 #include "timer.h"
 
 #define LARGURA 79
-#define ALTURA 30
+#define ALTURA 24
 #define SNAKE_MAX_LENGTH 100
 
 typedef struct {
